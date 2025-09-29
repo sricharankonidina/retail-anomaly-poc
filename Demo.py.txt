@@ -1,0 +1,25 @@
+
+---
+
+### Step 2 – Create `demo.py`
+1. In the same folder (`retail-anomaly-poc/`), create another new file → **demo.py**.  
+2. Copy-paste this code:
+
+```python
+import pandas as pd
+from sklearn.ensemble import IsolationForest
+
+# Create dummy retail sales data
+data = {"day": list(range(1, 31)),
+        "sales": [200, 210, 220, 205, 5000, 215, 190, 8000, 205, 210,
+                  220, 225, 230, 240, 250, 10000, 260, 265, 270, 275,
+                  280, 290, 300, 310, 315, 320, 15000, 330, 340, 350]}
+df = pd.DataFrame(data)
+
+# Train IsolationForest
+model = IsolationForest(contamination=0.1, random_state=42)
+df["anomaly"] = model.fit_predict(df[["sales"]])
+
+# Print anomalies
+print("Anomalies detected:")
+print(df[df["anomaly"] == -1])
